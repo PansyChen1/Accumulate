@@ -231,7 +231,7 @@ function fn8(a, b, c, d) {
 }(1, 2, 3, 4) //不会报错，会识别成单独的 (1, 2, 3, 4)
 ```
 
-### 3 闭包
+### 3. 闭包
 
 > 内部的函数被保存在外部，一定会生成闭包。
 > 形成闭包的真正原理是里面的函数比外面的函数生存的时间还长，正常来讲的话应该是一起销毁的。
@@ -277,7 +277,7 @@ for (var j = 0; j < 10; j++) {
 } // 10 10 10 10 10 10 10 10 10 10
 ```
 
-### 4 对象
+### 4. 对象
 
 * 对象的增删改查
 
@@ -362,16 +362,384 @@ if (str.length == 6) {
 console.log(test.sign); // undefined
 ```
 
-### 5 原型
+### 5. 原型
+
+* 定义：原型是 function 对象的一个属性，它定义了构造函数造出的对象的公有祖先。
+
+> 通过该构造函数产生的对象，可以继承该原型的属性和方法。原型也是对象。
+> Person.prototype 原型
+> Person.prototype = {} 是祖先
 
 ``` javascript
+Person.prototype.lastName = "Chen";
+Person.prototype.say = function() {
+        console.log('hi);
+        }
 
+        function Person() {
+            // new 时，隐式
+            // var this ={
+            //    __proto__: Person.prototype
+            //}
+        }
+
+        var person = new Person();
+        var person1 = new Person();
+        console.log(person.lastName, person1.lastName) // "Chen" "Chen"
+```
+
+* 构造函数
+
+> 构造函数是可以手动改变的。
+
+``` javascript
+function Car() {}
+var car = new Car();
+car.constructor = function FalseCar() {};
+console.log(car.constructor) // function Car() {}
+console.log(car.prototype) // constructor __proto__
+```
+
+### 6. 原型链
+
+> 构造函数、原型和实例的关系：
+> 每个构造函数都有一个原型对象 prototype，原型的对象都包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针。
+
+##### * 让原型对象等于另一个类型的实例，此时的原型的对象将包含一个指向另一个原型的指针，相应地，另一个原型中也包含着一个指向另一个构造函数的指针。假如另一个原型又是另一个类型的实例，那么上述关系依然成立，如此层层递进，就构成了实例与原型的链条，这就是所谓原型链的基本概念。
+
+``` javascript
+Grand.prototype.lastName = "Chen";
+
+function Grand() {
+    // new 时，隐式生成
+    // var this = {
+    //   __proto__: Grand.prototype
+    //}
+}
+var grand = new Grand();
+
+Father.prototype = grand;
+
+function Father() {};
+var father = new Father();
+
+Son.protype = father;
+
+function Son() {
+    hobbit: "Running"
+};
+var son = new Son();
+```
+
+### 7. 继承
+
+> 绝大多数对象的最终都会继承自 Object.prototype。
+> 特例：Object.create(null) 创建出来的对象没有原型，如果手动加上原型的话，系统是不承认的。且该方法只能传入一个 Object 或者 null。
+
+* 1）传统形式：原型链
+
+缺点：继承了太多不想要的属性。
+
+* 2）借用构造函数
+
+缺点：1> 不能继承借用构造函数的原型；
+2> 每次构造函数都要多走一个函数。
+
+* 3）共享原型
+
+缺点：不能随便改动自己的原型。
+
+``` javascript
+ Fruit.prototype.type = "hot"
+
+ function Fruit() {}
+
+ function Apple() {}
+ Apple.prototype = Fruit.prototype; // 共享原型，多个构造函数共用一个原型
+ var apple = new Apple();
+ var fruit = new Fruit();
+ // Son.prototype.sex = "male"; // 增加自己的属性和方法时，会改变原有的
+
+ // 源函数和目标函数
+ function inherit1(Target, Origin) {
+     Target.prototype = Origin.prototype;
+ }
+```
+
+* 4) 圣杯模式
+
+``` javascript
+ function inherit2(Target, Origin) {
+     function F() {}; // 中间函数
+     F.prototype = Origin.prototype;
+     Target.prototype = new F();
+     Target.prototype.constructor = Target; // 将其构造函数归位
+     Target.prototype.uber = Target.prototype; // 知道真正继承的是谁
+ }
+
+ // 高级写法
+ // var inherit = (function() {
+ //     var F = function() {}; // 保存的私有化变量，闭包的其中一个作用。通过外部访问不到，但是自己内部是存在的
+ //     return function(Target, Origin) {
+ //         F.prototype = Origin.prototype;
+ //         Target.prototype = new F();
+ //         Target.prototype.constructor = Target; // 将其构造函数归位
+ //         Target.prototype.uber = Target.prototype; // 知道真正继承的是谁
+ //     }
+ // }());
+
+ function Fruit2() {};
+
+ function Pear() {};
+
+ inherit2(Pear, Fruit2);
+
+ var fruit2 = new Fruit2();
+ var pear = new Pear();
+```
+
+### 8. this 指向
+
+* 1）预编译环节 this 指向 window；
+* 2）谁调用的 this 就指向谁；
+* 3）call apply 改变 this 指向；
+* 4）全局 this 指向 window。
+
+``` javascript
+// call / apply
+// 作用： 改变 this 指向，this 不用的话，默认指向 window。
+// 借用别人的函数，实现自己的功能。
+// 两者的区别：
+// 传参方式的不同：call 需要把实参按照形参的个数传递进去；apply 需要传一个 arguments 数组。
+
+function Fn13(name, age) {
+    // obj.name = name
+    // obj.age = age
+    // 相当于往 obj 对象中写入属性
+    this.name = name;
+    this.age = age;
+}
+var fn13 = new Fn13("Chen", 25);
+var obj = {
+
+}
+// Fn13(); 直接执行的话，会隐式的调用 Fn13.call()
+Fn13.call(obj, "Cheng", 24) // 让 Fn13()中所有的 this 都变成 obj
+console.log("obj 对象被写入了属性", obj)
 ```
 
 ``` javascript
+function Wheel(wheelSize, style) {
+    this.wheelSize = wheelSize;
+    this.style = style;
+}
 
+function Sit(c, sitColor) {
+    this.c = c;
+    this.sitColor = sitColor;
+}
+
+function Model(height, width, len) {
+    this.height = height;
+    this.width = width;
+    this.len = len;
+}
+
+function Car(wheelSize, style, c, sitColor, height, width, len) {
+    Wheel.call(this, wheelSize, style);
+    Sit.call(this, c, sitColor);
+    Model.apply(this, [height, width, len]);
+}
+var car = new Car(100, "colorful", "真皮", "yellow", 1800, 1000, 200);
+```
+
+### 9. 遍历对象 for...in
+
+``` javascript
+var obj = {
+    name: "Champion",
+    sex: "female",
+    age: 25,
+    height: 164,
+    weight: 57,
+}
+for (var prop in obj) {
+    // console.log(prop + " " + typeof(prop));
+    // console.log(obj[prop]);
+
+    // hasOwnProperty 用来判断属性是原型上的还是自己的，对象上都有这个方法
+    if (obj.hasOwnProperty(prop)) {
+        console.log(obj[prop]);
+    }
+}
 ```
 
 ``` javascript
+// A instance of B 
+// 看 A对象的原型链上有没有 B 的原型
+// A对象 是不是 B构造函数构造出来的
+```
 
+### 10. 深浅拷贝
+
+* 浅拷贝：原始值的克隆，值拷贝。
+
+``` javascript
+var lightCloneObj = {
+    name: "Clone",
+    age: "123",
+    sex: "female"
+}
+
+var lightCloneObj1 = {}
+
+function clone(target, origin) {
+    var target = target || {};
+    for (var prop in origin) {
+        target[prop] = origin[prop];
+    }
+    return target;
+}
+clone(lightCloneObj1, lightCloneObj);
+```
+
+* 深拷贝
+
+``` javascript
+var cloneObj = {
+    name: "Chen",
+    age: 123,
+    card: ['visa', 'master'],
+    husband: {
+        name: "Chen",
+        son: {
+            name: "aaa"
+        }
+    }
+}
+var cloneObj1 = {}
+
+// 遍历对象 for(var prop in obj)
+// 1 判断是不是原始值 typeof
+// 2 如果是引用值，判断是数组还是对象， instanceof() toString() constructor
+// 3 建立相应的数组或对象
+// 递归
+
+function deepClone(origin, target) {
+    var target = target || {},
+        toString = Object.prototype.toString,
+        arrStr = "[Object Array]";
+
+    for (var prop in origin) {
+        if (origin.hasOwnProperty(prop)) {
+            if (origin[prop] !== "null" && typeof(origin[prop]) == "object") {
+                target[prop] = toString.call(origin[prop]) == arrStr ? [] : {};
+                deepClone(origin[prop], target[prop]);
+            } else {
+                target[prop] = origin[prop];
+            }
+        }
+    }
+    return target
+}
+```
+
+### 11. 类数组
+
+``` javascript
+// 1 属性要为索引（数字）属性
+// 2 必须有 length 属性
+// 3 最好加上 push
+
+var similarArr = {
+    "3": "a",
+    "4": "b",
+    "5": "c",
+    "length": 3,
+    "push": Array.prototype.push,
+    // "splice": Array.prototype.splice 加上这个更像是一个数组
+}
+
+for (var prop in similarArr) {
+    console.log(similarArr[prop]);
+}
+
+similarArr.push('d');
+similarArr.push('e');
+console.log("similarArr----", similarArr);
+
+similarArr = {
+    "3": "d",
+    "4": "e",
+    "5": "c",
+    "length": 5,
+    "push": Array.prototype.push
+}
+
+Array.prototype.push = function(target) {
+    // similarArr[similarArr.lenght] = target;
+    this[this.length] = target;
+    this.length++;
+}
+```
+
+### 12. 封装一个函数用来判断 js 中的数据类型
+
+``` javascript
+// 分两类 原始值 和 引用值
+// 区分引用值
+function type(target) {
+    var ret = typeof(target);
+    var template = {
+        "[object Object]": "Object",
+        "[object Array]": "Array",
+        "[object Boolean]": "Boolean object",
+        "[object String]": "String object",
+        "[object Number]": "Number object"
+    }
+    if (target === null) {
+        return "null";
+    } else if (ret == "object") {
+        var str = Object.prototype.toString.call(target);
+        return template[str];
+    } else {
+        return ret;
+    }
+}
+```
+
+### 13. 数组去重
+
+``` javascript
+// 通过 hash 的方式：将出现的数组项作为索引存在一个对象中，依次比对
+var uniqueArr = [1, 1, 1, 2, 2, 4, 5, 5];
+var uniqueObj = {
+    "1": "abc",
+    "2": "abc",
+    "4": "abc",
+    "5": "abc"
+}
+
+// uniqueObj[1] undefined,
+// uniqueObj[1] abc,
+// uniqueObj[2] undefined,
+// uniqueObj[2] abc,
+// uniqueObj[4] undefined,
+// uniqueObj[5] undefined,
+// uniqueObj[5] abc
+
+Array.prototype.unique = function() {
+    var temp = {};
+    var arrNew = [];
+    var len = this.length;
+    for (var i = 0; i < len; i++) {
+        // this[i] 代表数组的第几位
+        if (!temp[this[i]]) {
+            // 此处 “abc” 必须为一个不为假的字符串
+            temp[this[i]] = "abc";
+            arr.push(this[i]);
+        }
+    }
+    return arr;
+}
 ```
