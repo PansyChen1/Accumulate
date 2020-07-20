@@ -946,3 +946,17 @@ eventDom.onclick = function(e) {
     console.log(target.innerText);
 }
 ```
+
+### 原始数据类型
+- Boolean
+- Number
+- String
+- Null
+- Undefined
+- Symbol
+- BigInt
+
+### 
+
+
+
