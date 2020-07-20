@@ -1,22 +1,22 @@
 ## 目录
 
-- [1.JavaScript执行三部曲](#1.JavaScript执行三部曲)
-- [2.作用域与作用域链](#2.作用域与作用域链)
-- [3.闭包](#3.闭包)
-- [4.对象](#4.对象)
-- [5.原型](#5.原型)
-- [6.原型链](#6.原型链)
-- [7.继承](#7.继承)
-- [8.this指向](#8.this指向)
-- [9.遍历对象 for···in](#9.遍历对象for···in)
-- [10.深浅拷贝](#10.深浅拷贝)
-- [11.类数组](#11.类数组)
-- [12.封装一个函数用来判断 js 中的数据类型](#12.封装一个函数用来判断js中的数据类型)
-- [13.数组去重](#13.数组去重)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
+* [1. JavaScript执行三部曲](#1. JavaScript执行三部曲)
+* [2. 作用域与作用域链](#2. 作用域与作用域链)
+* [3. 闭包](#3. 闭包)
+* [4. 对象](#4. 对象)
+* [5. 原型](#5. 原型)
+* [6. 原型链](#6. 原型链)
+* [7. 继承](#7. 继承)
+* [8.this指向](#8.this指向)
+* [9. 遍历对象 for···in](#9. 遍历对象for···in)
+* [10. 深浅拷贝](#10. 深浅拷贝)
+* [11. 类数组](#11. 类数组)
+* [12. 封装一个函数用来判断 js 中的数据类型](#12. 封装一个函数用来判断js中的数据类型)
+* [13. 数组去重](#13. 数组去重)
+* [](#)
+* [](#)
+* [](#)
+* [](#)
 
 ### 1. JavaScript 执行三部曲
 
@@ -761,5 +761,188 @@ Array.prototype.unique = function() {
         }
     }
     return arr;
+}
+```
+
+### 14. 事件
+
+* 三种绑定事件处理函数的方式：
+
+``` javascript
+// 1）ele.onXXX = function(event) {}
+// 好处：兼容性很好，但是一个元素的同一个时间只能绑定一个方法。
+// 基本等同于写在 html 行间上。
+// 句柄的形式
+
+div.onclick = function() {
+    console.log('onclick')
+    console.log(this) // 程序 this 指向的是 dom 元素本身
+    // this.onclick = null; 事件执行一次之后就失效了
+    this.style.backgroundColor = "green";
+}
+
+//2）obj.addEventListener(type. fn, false);
+// 可以给同一个事件的同一个对象绑定多个事件处理函数
+
+div.addEventListener('click', function() {
+    console.log('addEventListener');
+    console.log(this); // 程序 this 指向的是 dom 元素本身
+}, false)
+
+// 3）obj.attachEvent('on' + type, fn)
+// IE 独有，一个事件同样可以绑定多个事件处理函数。
+
+div.attachEvent('onclick', function() {
+    console.log('attachEvent'); // 程序 this 指向的是 window
+})
+```
+
+* 解除事件处理函数
+
+``` javascript
+// 1）
+elem.onclick = false / null;
+// 2)
+elem.removeEventListener(type, fn, false);
+// 3)
+elem.detachEvent('on' + type, fn)
+```
+
+* 封装一个兼容性的方法 addEvent(elem, type, handle)，给 dom 对象添加该事件类型的处理函数。
+
+``` javascript
+function addEvent(elem, type, handle) {
+    if (elem.addEventListener) {
+        elem.addEventListener(type, handle, false);
+    } else if (elem.attachEvent) {
+        elem.attachEvent('on' + type, function() {
+            handle.call(elem);
+        })
+    } else {
+        elem['on' + type] = handle;
+    }
+}
+```
+
+* 事件处理模型 --- 事件冒泡和事件捕获
+
+> 事件冒泡：结构（非视觉）上嵌套关系的元素，会存在事件冒泡的功能，即同一事件，自子元素冒泡至父元素（自底向上）。
+
+> 事件捕获：结构（非视觉）上嵌套的关系，会存在事件捕获的功能，即同一事件，自父元素捕获至子元素（事件源元素）（自顶向下）。
+
+> 触发顺序：先捕获，后冒泡。
+
+> focus，blur，change，subnit，reset，select 等事件不冒泡。
+
+``` javascript
+var wrapper = document.getElementsByClassName('wrapper')[0];
+var content = document.getElementsByClassName('content')[0];
+var box = document.getElementsByClassName('box')[0];
+
+wrapper.addEventListener('click', function() {
+    console.log('wrapperBubble')
+}, false);
+content.addEventListener('click', function() {
+    console.log('contentBubble')
+}, false);
+box.addEventListener('click', function() {
+    console.log('boxBubble')
+}, false);
+
+wrapper.addEventListener('click', function() {
+    console.log('wrapper')
+}, true); // 改为 true，则是捕获事件
+content.addEventListener('click', function() {
+    console.log('content')
+}, true);
+box.addEventListener('click', function() {
+    console.log('box')
+}, true);
+```
+
+* 取消事件冒泡
+
+``` javascript
+// W3C 标准 event.stopPropagation()；但不支持 ie9 以下的版本
+// IE 独有 event.cancelBubble = true; google 也有
+document.onclick = function(e) {
+    console.log('document')
+};
+
+wrapper.onclick = function(e) {
+    // e.stopPropagation();
+    // e.cancelBubble = true;
+    stopBubble(e);
+    console.log('box')
+};
+```
+
+* 封装一个取消冒泡的方法 stopBubble(event)
+
+``` javascript
+function stopBubble(event) {
+    if (event..stopPropagation) {
+        event.stopPropagation()
+    } else {
+        event.stopBubble = true;
+    }
+}
+```
+
+* 取消默认事件
+
+> 默认事件：表单提交，a标签跳转，右键菜单等。
+
+``` javascript
+// 取消右键菜单
+document.oncontextmenu = function(e) {
+    console.log('a');
+    // return false; // 只适用于句柄
+    // e.preventDefault();
+    // e.returnValue = false; // 兼容 IE
+    cancelHandler(e)
+}
+```
+
+* 封装一个组织默认事件的函数 cancelHandler(event)
+
+``` javascript
+function cancelHandler(event) {
+    if (event.preventDefault) {
+        event.preventDefault();
+    } else {
+        e.returnValue = false
+    }
+}
+```
+
+* 事件源对象
+
+> 事件对象 event，只能传一个，在 IE浏览器上会失效，IE 浏览器保存在 window.event 上。
+> 火狐浏览器：event.target；IE 浏览器：event.srcElement。
+
+``` javascript
+document.onclick = function(e) {
+    var event = e || window.event;
+    console.log(event)
+    var target = event.target || event.srcElement;
+    console.log(target)
+};
+```
+
+* 事件委托
+
+``` javascript
+// 利用事件冒泡和事件源对象进行处理。
+// 优点：
+// 1 性能提升 不需要循环所有的元素一个个绑定事件
+// 2 灵活 当有新的子元素时不需要重新绑定事件
+
+// 事件委托的例子
+var eventDom = document.getElementsByClassName('event')[0];
+eventDom.onclick = function(e) {
+    var event = e || window.event;
+    var target = event.target || event.srcElement;
+    console.log(target.innerText);
 }
 ```
