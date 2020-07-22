@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>layout</title>
+    <style>
+        /* 1 float + margin  */
+        .left--1 {
+            width: 100px;
+            height: 200px;
+            background: khaki;
+            float: left;
+        }
+        .right--1 {
+            margin-left: 100px;
+            height: 200px;
+            background: lavenderblush;
+        }
+
+        /* 2 float + overflow */
+        .left--2 {
+            width: 100px;
+            height: 200px;
+            background: lemonchiffon;
+            float: left;
+        }
+        .right--2 {
+            height: 200px;
+            overflow: hidden;
+            background: lightcoral;
+        }
+
+        /* 3 使用 table */
+        #parent1 {
+            display: table;
+            width: 100%;
+            height: 200px;
+        }
+        .left--3 {
+            width: 100px;
+            background: lightskyblue;
+        }
+        .right--3 {
+            background: linen;
+        }
+        .left--3,.right--3 {
+            display: table-cell;
+        }
+
+        /* 4 position */
+        #parent2 {
+            position: relative;
+        }
+        .left--4,.right--4 {
+            position: absolute;
+            top: 0;
+            height: 200px;
+        }
+        .left--4 {
+            width: 100px;
+            left: 0;
+            background: mediumorchid;
+        }
+        .right--4 {
+            left: 100px;
+            background: palegoldenrod;
+            right: 0;
+        }
+
+        /* 使用 flex 实现 */
+        #parent3 {
+            width: 100%;
+            height: 200px;
+            display: flex;
+        }
+        .left--5 {
+            width: 100px;
+            background: pink;
+        }
+        .right--5 {
+            flex: 1;
+            background: slateblue;
+        }
+    </style>
+</head>
+<body>
+    <!-- 两列布局 -->
+    <!-- 1 float + margin -->
+    <div class="left--1">左列定宽</div>
+    <div class="right--1">右列自适应</div>
+
+    <!-- 2 float + overflow -->
+    <!-- 原理：left 左浮动，right 触发 bfc 达到自适应 -->
+    <div class="left--2">左列定宽</div>
+    <div class="right--2">右列自适应</div>
+
+    <!-- 3 使用 table -->
+    <!-- 原理：CSS table 以表格的形式显示。 -->
+    <div id="parent1">
+        <div class="left--3">左列定宽</div>
+        <div class="right--3">右列自适应</div>
+    </div>
+
+    <!-- 4 使用 position 实现 -->
+    <!-- 原理：利用绝对定位算好宽高固定两个盒子的位置 -->
+    <!-- <div id="parent2"> -->
+        <!-- <div class="left--4">左列定宽</div> -->
+        <!-- <div class="right--4">右列自适应</div> -->
+    <!-- </div> -->
+
+    <!-- 5 使用 flex 实现 -->
+    <div id="parent3">
+        <div class="left--5">左列定宽</div>
+        <div class="right--5">右列自适应</div>
+    </div>
+
+    <!-- 三列布局 -->
+    <!-- 1 两侧定宽，中间自适应 -->
+    
+    
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -648,7 +648,7 @@ var cloneObj1 = {}
 function deepClone(origin, target) {
     var target = target || {},
         toString = Object.prototype.toString,
-        arrStr = "[Object Array]";
+        arrStr = "[object Array]";
 
     for (var prop in origin) {
         if (origin.hasOwnProperty(prop)) {
