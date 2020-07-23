@@ -602,7 +602,8 @@ for (var prop in obj) {
 
 ### 10. 深浅拷贝
 
-* 浅拷贝：原始值的克隆，值拷贝。
+##### 10.1 浅拷贝
+> 对基本数据类型进行了值传递，对引用数据类型进行了引用的传递，而没有真实的创建一个新的对象，则为浅拷贝。
 
 ``` javascript
 var lightCloneObj = {
@@ -623,7 +624,27 @@ function clone(target, origin) {
 clone(lightCloneObj1, lightCloneObj);
 ```
 
-* 深拷贝
+##### 10.2 深拷贝
+> 对基本数据类型进行了值传递，对引用数据类型创建了一个新对象，并复制其内容，则为深拷贝。
+
+###### 10.2.1 深拷贝的实现方式
+
+* Object.assign(target, ...origin)
+
+> 是一种可以对非嵌套对象进行深拷贝的方法，如果对象中出现了嵌套的情况，则对被嵌套对象的行为就变成了浅拷贝。
+
+* 转成 JSON
+
+> 用 JSON.stringfy() 把对象转换成字符串，再用 JSON.parse() 把字符串转成新的对象。
+
+```javascript
+var origin = {
+    'name': 'Champion'
+}
+var target = JSON.parse(JSON.stringfy(origin));
+```
+
+* 采用递归的方式进行深拷贝
 
 ``` javascript
 var cloneObj = {

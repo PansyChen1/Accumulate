@@ -82,6 +82,51 @@
             flex: 1;
             background: slateblue;
         }
+
+        #bfc {
+            border: 3px solid #99d;
+            overflow: hidden;
+        }
+
+        .bfc-left {
+            border: 2px solid #23d;
+            float: left;
+            width: 200px;
+            height: 200px;
+            text-align: center;
+            line-height: 200px;
+        }
+        .bfc-right {
+            float: right;
+            border: 2px solid #2ea;
+            width: 200px;
+            height: 200px;
+        }
+
+        /* 双飞翼布局 */
+        .le--3,.ri--3 {
+            width: 100px;
+            height: 200px;
+            background: #dc2;
+        }
+        .le--3 {
+            float: left;
+            margin-left: -100%;
+        }
+        .ri--3 {
+            float: right;
+            margin-left: -100px;
+        }
+        .content--3 {
+            float: left;
+            width: 100%;
+        }
+        .main--3 {
+            height: 200px;
+            background: #a2c;
+            margin-left: 100px;
+            margin-right: 100px;
+        }
     </style>
 </head>
 <body>
@@ -115,13 +160,32 @@
         <div class="right--5">右列自适应</div>
     </div>
 
+    <!-- <div id="bfc">
+        <div class="bfc-left">left</div>
+        <div class="bfc-right">right</div>
+    </div> -->
+
     <!-- 三列布局 -->
     <!-- 1 两侧定宽，中间自适应 -->
+
+    <!-- 1.1 流体布局 -->
+    <div id="container--1">
+        <div class="le--1"></div>
+        <div class="ri--1"></div>
+        <div class="main--1"></div>
+    </div>
+
+    <!-- 1.2 BFC 三栏布局 -->
+
+    <!-- 1.3 双飞翼布局 -->
+    <div class="content--3">
+        <div class="main--3"></div>
+    </div>
+    <div class="le--3"></div>
+    <div class="ri--3"></div>
+
+    <!-- 1.4 圣杯布局 -->
     
-    
-
-
-
 
 
 
