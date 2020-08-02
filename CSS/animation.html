@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation</title>
+    <style>
+        div {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: darksalmon;
+            animation: myMove 2s linear 3 alternate both;
+        }
+
+        @keyframes myMove {
+            /* 0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(200px, 0);
+            } */
+
+            /* 
+            from 表示最开始的那一帧，to 表示结束时的那一帧
+            */
+
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(200px, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!--
+        @keyframes：规定动画，创建动画；
+        animation：所有动画属性的简写属性，除了 animation-play-state；
+        animation-name：规定 @keyframes 动画的名称；
+        animation-duration：规定动画完成一个周期所花费的秒或者毫秒，默认是0；
+        animation-timing-function:规定动画的速度曲线，默认是“ease”；
+        animation-fill-mode：规定当动画不播放时，要应用到元素的样式
+        animation-delay：规定动画何时开始；
+        animation-iteration-count：规定动画被播放的次数，默认是1；
+        animation-direction：规定动画是否在下一周期逆向地播放，默认是“normal”；
+        animation-play-state：规定动画是否正在运行或者暂停，默认是“running”。
+
+    -->
+    <div></div>
+
+    <script type="text/javascript">
+        function bubbleSort1(arr) {
+            var len = arr.length - 1;
+            var loopTimes = 0;
+            for (var i = 0; i < len; i++) {
+                for (var j = 0; j < len - 1 - i; j++) {
+                    if (arr[j] > arr[j + 1]) { // 相邻元素两两对比
+                        var temp = arr[j]; // 元素交换
+                        arr[j] = arr[j + 1];
+                        arr[j + 1] = temp;
+                    }
+                }
+                loopTimes++;
+            }
+            return loopTimes;
+        }
+
+        function bubbleSort2(arr) {
+            let loopTimes = 0
+            for (let i = 0, len = arr.length; i < len; i++) {
+                let finished = true
+                for (let j = 0, len = arr.length - i - 1; j < len; j++) {
+                    if (arr[j] > arr[j + 1]) {
+                        finished = false;
+                        temp = arr[j + 1]
+                        arr[j + 1] = arr[j]
+                        arr[j] = temp
+                    }
+                }
+                loopTimes++;
+                if (finished)
+                    break
+            }
+            return loopTimes
+        }
+
+        let arr = [2, 3, 9, 4, 5]
+        let res = bubbleSort2(arr)
+        console.log('loopTimes:' + bubbleSort2(arr))
+        console.log('the Array after sorting:' + arr)
+
+
+        function timeout(ms) {
+            return new Promise((resolve) => {
+                setTimeout(resolve, ms);
+            })
+        }
+
+        class Stack {
+           push();
+           pop();
+        }
+
+        function twoSum(nums, target) {
+            var numsLen = nums.length;
+            for(var i = 0;i < numsLen;i++) {
+                for(var j = i + 1;j < numsLen; j++) {
+                    if(nums[j] == target - nums[i]) {
+                        return [i, j];
+                    }
+                }
+            }
+        }
+
+        function twoSum(nums, target) {
+            var numsLen = nums.length;
+            for(var i = 0;i < numsLen;i++) {
+                
+            }
+        }
+
+        async function asyncPrint(value, ms) {
+            await timeout(ms);
+            console.log(value);
+        }
+        asyncPrint('hello', 2000);
+    </script>
+</body>
+
+</html>
