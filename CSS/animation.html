@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animation</title>
     <style>
-        div {
+        .my_move {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -34,6 +34,51 @@
                 transform: translate(200px, 0);
             }
         }
+
+        /* 呼吸灯 */
+        .breath_light1 {
+            width: 60px;
+            height: 60px;
+            border: darkseagreen 1px solid ;
+            border-radius: 50%;
+            background: darkseagreen;
+            opacity: 0.1;                                   /* 不透明度 */
+            overflow: hidden;
+            margin: 0 auto;
+            animation: breath 3s ease-in-out infinite;
+        }
+        @keyframes breath {
+            from { opacity: 0.1;}
+            50% { opacity: 1;}
+            to { opacity: 0.1;}
+        }
+
+        .breath_light2 {
+            width: 60px;
+            height: 60px;
+            background: firebrick;
+        }
+        .breath_light2 span {
+            width:50px;
+            height:50px;
+            line-height:50px;
+            text-align:center;
+            margin:70px;
+            display:inline-block;
+            border-radius:100%;
+            background: #fff;
+            animation: change 3s ease-in-out infinite alternate;
+        }
+        @keyframes change {
+            0% {
+                border:5px solid rgba(255,0,0,0);
+                box-shadow:0 0 0 rgba(255,0,0,0),0 0 0 rgba(255,0,0,0) inset;
+            }
+            100% {
+                border:5px solid rgba(255,0,0,1);
+                box-shadow:0 0 70px rgba(255,0,0,1),0 0 15px rgba(255,0,0,0.6) inset;
+            }   
+        }
     </style>
 </head>
 
@@ -51,84 +96,15 @@
         animation-play-state：规定动画是否正在运行或者暂停，默认是“running”。
 
     -->
-    <div></div>
+    <div class="my_move"></div>
+
+    <!-- 呼吸灯 -->
+    <div class="breath_light1"></div>
+
+    <div class="breath_light2"><span></span></div>
 
     <script type="text/javascript">
-        function bubbleSort1(arr) {
-            var len = arr.length - 1;
-            var loopTimes = 0;
-            for (var i = 0; i < len; i++) {
-                for (var j = 0; j < len - 1 - i; j++) {
-                    if (arr[j] > arr[j + 1]) { // 相邻元素两两对比
-                        var temp = arr[j]; // 元素交换
-                        arr[j] = arr[j + 1];
-                        arr[j + 1] = temp;
-                    }
-                }
-                loopTimes++;
-            }
-            return loopTimes;
-        }
 
-        function bubbleSort2(arr) {
-            let loopTimes = 0
-            for (let i = 0, len = arr.length; i < len; i++) {
-                let finished = true
-                for (let j = 0, len = arr.length - i - 1; j < len; j++) {
-                    if (arr[j] > arr[j + 1]) {
-                        finished = false;
-                        temp = arr[j + 1]
-                        arr[j + 1] = arr[j]
-                        arr[j] = temp
-                    }
-                }
-                loopTimes++;
-                if (finished)
-                    break
-            }
-            return loopTimes
-        }
-
-        let arr = [2, 3, 9, 4, 5]
-        let res = bubbleSort2(arr)
-        console.log('loopTimes:' + bubbleSort2(arr))
-        console.log('the Array after sorting:' + arr)
-
-
-        function timeout(ms) {
-            return new Promise((resolve) => {
-                setTimeout(resolve, ms);
-            })
-        }
-
-        class Stack {
-           push();
-           pop();
-        }
-
-        function twoSum(nums, target) {
-            var numsLen = nums.length;
-            for(var i = 0;i < numsLen;i++) {
-                for(var j = i + 1;j < numsLen; j++) {
-                    if(nums[j] == target - nums[i]) {
-                        return [i, j];
-                    }
-                }
-            }
-        }
-
-        function twoSum(nums, target) {
-            var numsLen = nums.length;
-            for(var i = 0;i < numsLen;i++) {
-                
-            }
-        }
-
-        async function asyncPrint(value, ms) {
-            await timeout(ms);
-            console.log(value);
-        }
-        asyncPrint('hello', 2000);
     </script>
 </body>
 

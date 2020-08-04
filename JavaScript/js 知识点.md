@@ -238,13 +238,12 @@ a();
 (function() {})();
 // 只有表达式才能被执行符号执行，且执行完之后会销毁，比如：
 var fn6 = function(param) {
-        console.log('fn6')
-    }()
+    console.log('fn6')
+}()
 
-    +
-    function fn7() {
-        console.log('fn7')
-    }() // + 正 负 ！ 也是立即执行函数
++ function fn7() {
+    console.log('fn7')
+}() // + 正 负 ！ 也是立即执行函数
 
 function fn8(a, b, c, d) {
     console.log(a + b + c + d);
@@ -521,16 +520,17 @@ var son = new Son();
 ### 8. this 指向
 
 * 1）预编译环节 this 指向 window；
-* 2）谁调用的 this 就指向谁；
-* 3）call apply 改变 this 指向；
+* 2）谁调用的 this 就指向谁（运行时，this 永远指向最后调用它的那个对象）；
+* 3）call apply bind 改变 this 指向；
 * 4）全局 this 指向 window。
 
 ``` javascript
-// call / apply
+// call / apply / bind
 // 作用： 改变 this 指向，this 不用的话，默认指向 window。
 // 借用别人的函数，实现自己的功能。
 // 两者的区别：
 // 传参方式的不同：call 需要把实参按照形参的个数传递进去；apply 需要传一个 arguments 数组。
+// call 和 apply 是直接绑定调用；bind 是绑定不调用，返回绑定后的函数。
 
 function Fn13(name, age) {
     // obj.name = name
