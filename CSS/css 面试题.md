@@ -18,6 +18,8 @@ IE 盒模型的宽度 width = content + padding + border。
 
 ### 4. 水平垂直居中
 
+##### 4.1 居中元素定宽高使用
+
 * 绝对定位 + margin: auto
 
 ``` css
@@ -50,6 +52,8 @@ div {
     margin-top: -100px;
 }
 ```
+
+##### 4.2 居中元素不定宽高使用
 
 * 绝对定位 + transform
 

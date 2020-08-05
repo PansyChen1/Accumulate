@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <script type="text/javascript">
         // 写一个逆转函数
@@ -18,7 +20,58 @@
             document.write(str)
         }
 
+        // test case
+        const a = {
+            start: 3,
+            end: 5
+        };
+        const b = {
+            start: 4,
+            end: 6
+        };
+        const c = {
+            start: 7,
+            end: 8
+        };
+
+        isOverlapped(a, b); // true
+        isOverlapped(b, c); // false
+
+
+        /**
+         * @param {Range[]} intervals - 若干个区间
+         * @return {Range[]} 合并后的区间
+         */
+        function merge(intervals) {
+            // TODO
+            let startArr = [];
+            let startValue, endValue;
+            for(let prop of intervals) {
+                prop["start"]
+            }
+
+        }
+
+        // test case
+        const a = {
+            start: 3,
+            end: 5
+        };
+        const b = {
+            start: 4,
+            end: 6
+        };
+        const c = {
+            start: 7,
+            end: 8
+        };
+        const d = {
+            start: 1,
+            end: 2
+        }
+
+        merge([a, b, c]); // [{ start: 3, end: 6 }, { start: 7, end: 8 }]
     </script>
 </body>
-</html>
 
+</html>
